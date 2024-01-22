@@ -37,7 +37,7 @@ async function getCoordinates(city) {
 }
 
 async function getPointsOfInterest(city) {
-    const apiKey = "5ae2e3f221c38a28845f05b66938d71bb7778874086ac181360e34f7"; // Replace with your Points of Interest API key
+    const apiKey = "5ae2e3f221c38a28845f05b66938d71bb7778874086ac181360e34f7"; 
     const url = `https://api.opentripmap.com/0.1/en/places/geoname?name=${city}&apikey=${apiKey}`;
 
     const response = await fetch(url);
@@ -46,4 +46,28 @@ async function getPointsOfInterest(city) {
     return poiData;
 }
 
-module.exports = { getWeather, getCoordinates, getPointsOfInterest };
+const https = require("https");
+
+function getExchangeRates() {
+    return new Promise((resolve, reject) => {
+        const url = `https://v6.exchangerate-api.com/v6/718558d545977bac404ab378/latest/USD`;
+
+        https.get(url, (response) => {
+            let data = "";
+            response.on("data", (chunk) => {
+                data += chunk;
+            });
+
+            response.on("end", () => {
+                const exchangeData = JSON.parse(data);
+                resolve(exchangeData);
+            });
+        }).on("error", (error) => {
+            reject(error);
+        });
+    });
+}
+
+module.exports = { getWeather, getCoordinates, getPointsOfInterest, getExchangeRates };
+
+

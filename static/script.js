@@ -20,6 +20,7 @@ document.getElementById("weatherForm").addEventListener("submit", async function
         <p>Rain Volume (last 3 hours): ${resultData.rainVolumeLast3Hours} mm</p>
         <img src="https://openweathermap.org/img/wn/${resultData.icon}@2x.png" alt="weather icon">
         <p>Interesting point: ${resultData.pointsOfInterest}</p>
+        <p>Current dollar: ${resultData.exchange}KZT</p>
     `;
 
     document.getElementById("weatherResult").innerHTML = resultHtml;
@@ -40,10 +41,17 @@ document.getElementById("weatherForm").addEventListener("submit", async function
     marker = L.marker([newCoordinates.latitude, newCoordinates.longitude]).addTo(map);
 
     map.panTo([newCoordinates.latitude, newCoordinates.longitude]);
+    
 
     createRainChart(resultData.rainVolumeLast3Hours);
 
 });
+
+function displayExchangeRates(exchangeRates) {
+    return Object.entries(exchangeRates)
+        .map(([currency, rate]) => `${currency}: ${rate}`)
+        .join(', ');
+}
 
 function createRainChart(rainVolume) {
     const ctx = document.getElementById('rainChart').getContext('2d');
